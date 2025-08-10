@@ -19,7 +19,7 @@
 
 ## 배포
 
-이 프로젝트는 [Render](https.com/)에 배포할 수 있도록 설정되어 있습니다.
+이 프로젝트는 [Render](https://splint-mission-3.onrender.com/)에 배포할 수 있도록 설정되어 있습니다.
 
 `render-build.sh` 스크립트가 빌드 및 배포 과정을 처리합니다:
 1.  의존성 설치 (`npm install`).
