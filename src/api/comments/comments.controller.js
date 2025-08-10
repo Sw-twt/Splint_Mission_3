@@ -7,11 +7,14 @@ exports.createProductComment = async (req, res, next) => {
     const { productId } = req.params;
     const { content } = req.body;
     const comment = await prisma.comment.create({
-      data: { content, productId: parseInt(productId) },
+      data: { 
+        content, 
+        productId: parseInt(productId) 
+      },
     });
     res.status(201).json(comment);
   } catch (error) {
-    next(error);
+    next(error); // 에러 핸들러로 전달
   }
 };
 
@@ -21,7 +24,10 @@ exports.createArticleComment = async (req, res, next) => {
     const { articleId } = req.params;
     const { content } = req.body;
     const comment = await prisma.comment.create({
-      data: { content, articleId: parseInt(articleId) },
+      data: { 
+        content, 
+        articleId: parseInt(articleId) 
+      },
     });
     res.status(201).json(comment);
   } catch (error) {
@@ -29,7 +35,7 @@ exports.createArticleComment = async (req, res, next) => {
   }
 };
 
-// 상품 댓글 목록 조회 (Cursor-based Pagination)
+// 상품 댓글 목록 조회 (커서 기반 페이지네이션)
 exports.getProductComments = async (req, res, next) => {
   try {
     const { productId } = req.params;
@@ -37,11 +43,11 @@ exports.getProductComments = async (req, res, next) => {
 
     const comments = await prisma.comment.findMany({
       where: { productId: parseInt(productId) },
-      take: parseInt(limit),
-      skip: cursor ? 1 : 0,
-      cursor: cursor ? { id: parseInt(cursor) } : undefined,
-      orderBy: { createdAt: 'desc' },
-      select: { id: true, content: true, createdAt: true },
+      take: parseInt(limit), // 가져올 댓글 수
+      skip: cursor ? 1 : 0, // 커서가 있으면 1개 건너뛰기
+      cursor: cursor ? { id: parseInt(cursor) } : undefined, // 커서 위치 지정
+      orderBy: { createdAt: 'desc' }, // 최신순으로 정렬
+      select: { id: true, content: true, createdAt: true }, // 필요한 필드만 선택
     });
 
     res.status(200).json(comments);
@@ -50,7 +56,7 @@ exports.getProductComments = async (req, res, next) => {
   }
 };
 
-// 게시글 댓글 목록 조회 (Cursor-based Pagination)
+// 게시글 댓글 목록 조회 (커서 기반 페이지네이션)
 exports.getArticleComments = async (req, res, next) => {
   try {
     const { articleId } = req.params;
@@ -93,7 +99,7 @@ exports.deleteComment = async (req, res, next) => {
     await prisma.comment.delete({
       where: { id: parseInt(commentId) },
     });
-    res.status(204).send();
+    res.status(204).send(); // 성공적으로 삭제되었으나 컨텐츠는 없음을 알림
   } catch (error) {
     next(error);
   }
